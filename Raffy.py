@@ -8,7 +8,7 @@ import time
 from uuid import getnode as get_mac
 
 rc522_reader = SimpleMFRC522()
-url = 'https://raffy-admin/rfid-endpoint'
+url = 'http://raffy-admin/rfid-endpoint'
 
 print('Ready. Listening...');
 
