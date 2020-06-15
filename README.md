@@ -10,6 +10,10 @@ RFID Reader messaging and processing for Raffy.
 
 `sudo apt-get install -y python python3`
 
+3. Dependencies
+
+`sudo pip3 install spidev mfrc522`
+
 ## Setup
 
 ### Clone
