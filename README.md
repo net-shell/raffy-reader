@@ -8,7 +8,7 @@ RFID Reader messaging and processing for Raffy.
 
 2. Python 3
 
-`sudo apt-get install -y python python3`
+`sudo apt-get install -y python python3 python-pip python3-pip`
 
 3. Dependencies
 
