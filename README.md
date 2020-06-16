@@ -6,11 +6,15 @@ RFID Reader messaging and processing for Raffy.
 
 1. Raspbian 10 (buster)
 
-2. Python 3
+2. Git
+
+`sudo apt-get install -y git`
+
+3. Python 3
 
 `sudo apt-get install -y python python3 python-pip python3-pip`
 
-3. Dependencies
+4. Dependencies
 
 `sudo pip3 install spidev mfrc522`
 
