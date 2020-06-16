@@ -24,7 +24,7 @@ RFID Reader messaging and processing for Raffy.
 
 Clone the repository:
 
-`git clone git@github.com:net-shell/raffy-reader.git /home/pi/raffy-reader`
+`git clone https://github.com/net-shell/raffy-reader.git /home/pi/raffy-reader`
 
 ### Startup
 
