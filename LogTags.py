@@ -51,5 +51,7 @@ try:
                         print("CLOSED PIN", pin)
                 else:
                         time.sleep(2)
+except:
+	print("ERROR!")
 finally:
         GPIO.cleanup()
