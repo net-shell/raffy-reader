@@ -6,6 +6,7 @@ import requests
 import base64
 import time
 import json
+import sys
 from uuid import getnode as get_mac
 
 GPIO.setmode(GPIO.BCM)
@@ -17,8 +18,8 @@ url = 'http://raffy-admin/iot/log-tag'
 
 print('Ready. Listening...');
 
-try:
-        while True:
+while True:
+        try:
                 id, text = rc522_reader.read()
                 print("CARD", id, text)
 
@@ -53,9 +54,11 @@ try:
                         print("CLOSED PIN", pin)
                 else:
                         time.sleep(2)
-except Exception as e:
-        print("ERROR!")
-        print(str(e))
-        logging.error(e)
-finally:
-        GPIO.cleanup()
+        except KeyboardInterrupt:
+                print("ABORTED.")
+                sys.exit()
+        except Exception as e:
+                print("ERROR!")
+                print(str(e))
+        finally:
+                GPIO.cleanup()

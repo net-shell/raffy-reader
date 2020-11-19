@@ -4,15 +4,24 @@ import sys
 import requests
 import base64
 import json
+import RPi.GPIO as GPIO
 from uuid import getnode as get_mac
 
-url = 'http://raffy-admin/iot/log-tag';
+url = 'http://raffy-admin/iot/log-tag'
 
-try:
-        while True:
-                print("LISTENING")
-                sys.stdin = open('/dev/tty0', 'r')
-                id = input()
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.OUT)
+GPIO.setup(27, GPIO.OUT)
+print("Control pins are set.")
+
+sys.stdin = open('/dev/tty0', 'r')
+print("Listening...")
+
+def listen():
+    try:
+        with open('/dev/tty0', 'r') as tty:
+            while True:
+                id = tty.readline().rstrip()
                 print("CARD", id)
 
                 encoded = str(id)
@@ -31,7 +40,6 @@ try:
                 result = json.loads(x.text)
                 wait = 2
                 pin = 17
-
                 print("STATUS", result['status'])
 
                 if result['status'] == 'success':
@@ -46,9 +54,14 @@ try:
                         print("CLOSED PIN", pin)
                 else:
                         time.sleep(2)
-except Exception as e:
-        print("ERROR!")
+    except KeyboardInterrupt:
+        print("Exiting...")
+    except Exception as e:
+        print("ERROR! Warm restart...")
         print(str(e))
-        logging.error(e)
-finally:
-        print("Closing...")
+        listen()
+    finally:
+        print("Cleaning up...")
+        GPIO.cleanup()
+
+listen()
