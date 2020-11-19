@@ -20,6 +20,10 @@ RFID Reader messaging and processing for Raffy.
 
 ## Setup
 
+### RPi Wiring
+
+![Wiring](https://raw.githubusercontent.com/net-shell/raffy-reader/master/rc522_wiring.jpg)
+
 ### Clone
 
 Clone the repository:
