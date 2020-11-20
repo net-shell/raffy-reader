@@ -1,30 +1,34 @@
 #!/usr/bin/env python
-
-import RPi.GPIO as GPIO
-from mfrc522 import SimpleMFRC522
+import time
+import sys
 import requests
 import base64
-import time
 import json
-import sys
+import RPi.GPIO as GPIO
 from uuid import getnode as get_mac
+from rfidhid.core import RfidHid
+
+url = 'http://raffy-admin/iot/log-tag'
+
+try:
+    #rfid = RfidHid(0x16c0, 0x27db)
+    rfid = RfidHid()
+    print("Listening...")
+except Exception as e:
+    print("ERROR", e)
+    exit()
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.OUT)
 GPIO.setup(27, GPIO.OUT)
-url = 'http://raffy-admin/iot/log-tag'
+print("Control pins are set.")
 
-while True:
-        try:
-            while True:
-                rc522_reader = SimpleMFRC522()
-                print(rc522_reader.READER)
-                if not rc522_reader.READER:
-                    raise ValueError
-                print('Ready. Listening...')
-
-                id, text = rc522_reader.read()
-                print("CARD", id, text)
+def listen():
+    try:
+        while True:
+                tag = rfid.read_tag()
+                id = tag.get_tag_uid()
+                print("CARD", id)
 
                 encoded = str(id)
                 encoded_bytes = encoded.encode('ascii')
@@ -35,15 +39,15 @@ while True:
                 reader_bytes = reader.encode('ascii')
                 reader_base64 = base64.b64encode(reader_bytes)
 
-                postdata = {'id': base64_bytes, 'text': text, 'reader': reader_base64}
+                postdata = {'id': base64_bytes, 'reader': reader_base64}
                 x = requests.post(url, data = postdata, verify = False)
                 print(x.text)
 
                 result = json.loads(x.text)
                 wait = 2
                 pin = 17
-
                 print("STATUS", result['status'])
+                rfid.beep()
 
                 if result['status'] == 'success':
                         wait = int(result['action']['time'])
@@ -57,14 +61,13 @@ while True:
                         print("CLOSED PIN", pin)
                 else:
                         time.sleep(2)
-        except KeyboardInterrupt:
-            print("ABORTED.")
-        except Exception as e:
-            print("ERROR!")
-            print(str(e))
-        finally:
-            try:
-                GPIO.cleanup()
-            except Exception:
-                print("IO CLEANUP ERROR!")
-            sys.exit()
+    except KeyboardInterrupt:
+        print("Exiting...")
+    except Exception as e:
+        print("ERROR!", str(e))
+        #listen()
+    finally:
+        print("Cleaning up...")
+        GPIO.cleanup()
+
+listen()

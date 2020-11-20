@@ -30,11 +30,11 @@ Clone the repository:
 
 `git clone https://github.com/net-shell/raffy-reader.git /home/pi/raffy-reader`
 
-### Startup
+### Schedule
 
-Run `crontab -e`. Add the following line at the end, write changes and exit the editor.
+Run `sudo crontab -e`. Add the following line at the end, write changes and exit the editor.
 
-`@reboot sudo bash /home/pi/raffy-reader/log-tags.sh > /home/pi/logs/cronlog 2>&1`
+`*/5 * * * * /home/pi/raffy-reader/run.sh >> /home/pi/logs/run.log`
 
 ### Network up
 
