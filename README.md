@@ -30,6 +30,16 @@ Clone the repository:
 
 `git clone https://github.com/net-shell/raffy-reader.git /home/pi/raffy-reader`
 
+### Hosts File Entry
+
+The Python scripts that read the RFID tags are using a non-existent domain `raffy-admin` to target the server that will process the activity.
+In order to resolve this domain properly, add the IP address of the server either in local network or the internet.
+
+```
+# /etc/hosts
+raffy-admin  192.168.0.100 # The IP where raffy-admin is running
+```
+
 ### Schedule
 
 Run `sudo crontab -e`. Add the following line at the end, write changes and exit the editor.
